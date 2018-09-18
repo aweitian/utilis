@@ -58,50 +58,81 @@ class Arr
 
 
     /**
-     * 严格模式下,FILTERS中的key必须全部存在,否则返回空
-     * @param $array
-     * @param $filters
-     * @param bool $strict
+     * 第一个数组，必选
+     * 最后一个BOOL，可选
+     * 中间至少一个字符串类型
      * @return array
+     * @throws \Exception
      */
-    public static function get($array, $filters, $strict = true)
+    public static function get()
     {
-        return self::_get($array, $filters, $strict);
-    }
-
-    /**
-     * filter不是数组和字符串,返回ARRAY
-     * @param $array
-     * @param $filters
-     * @return array
-     */
-    public static function except($array, $filters)
-    {
-        return self::_get($array, $filters, false, false);
-    }
-
-    private static function _get($array, $filters, $strict = true, $keep = true)
-    {
-        if (is_string($filters)) {
-            $filters = explode(",", $filters);
+        if (func_num_args() < 2) {
+            throw new \Exception('less than 2 parameters.');
         }
-        if (!is_array($filters)) {
-            if ($strict)
-                return array();
-            return $array;
+        $array = func_get_arg(0);
+        if (!is_array($array)) {
+            throw new \Exception('First arg must be array.');
+        }
+        $strict = func_get_arg(func_num_args() - 1);
+        $rear = 0;
+        if (!is_bool($strict)) {
+            $strict = true;
+        } else {
+            $rear = 1;
+        }
+        $filters = array();
+        for ($i = 1; $i < func_num_args() - $rear; $i++) {
+            $p = func_get_arg($i);
+            if (is_string($p)) {
+                $filters[] = $p;
+            }
+        }
+        if (empty($filters)) {
+            throw new \Exception('less than 1 string parameter for filtering.');
         }
         $ret = array();
         foreach ($filters as $filter) {
             if (!array_key_exists($filter, $array)) {
-                if ($keep) {
-                    if ($strict)
-                        return array();
-                } else {
-                    $ret[$filter] = $array[$filter];
-                }
+                if ($strict)
+                    return array();
             } else {
                 $ret[$filter] = $array[$filter];
             }
+        }
+        return $ret;
+    }
+
+    /**
+     * 第一个数组，必选
+     * 至少一个字符串类型
+     * @return array
+     * @throws \Exception
+     */
+    public static function except()
+    {
+        if (func_num_args() < 2) {
+            throw new \Exception('less than 2 parameters.');
+        }
+        $array = func_get_arg(0);
+        if (!is_array($array)) {
+            throw new \Exception('First arg must be array.');
+        }
+        $filters = array();
+        for ($i = 1; $i < func_num_args(); $i++) {
+            $p = func_get_arg($i);
+            if (is_string($p)) {
+                $filters[] = $p;
+            }
+        }
+        if (empty($filters)) {
+            throw new \Exception('less than 1 string parameter for filtering.');
+        }
+        $ret = array();
+        foreach ($array as $key => $filter) {
+            if (in_array($key, $filters)) {
+                continue;
+            }
+            $ret[$key] = $array[$key];
         }
         return $ret;
     }
