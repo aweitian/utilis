@@ -31,6 +31,28 @@ class ArrTest extends \PHPUnit_Framework_TestCase
         ), Arr::get($array, 'name', 'age', 'sx', false));
     }
 
+
+    public function testG()
+    {
+        $array = array(
+            'name' => 'name_ff',
+            'age' => 55,
+            'sex' => 'male',
+            'extra' => 'abandon'
+        );
+        $this->assertEquals(array(
+            'name' => 'name_ff',
+            'age' => 55,
+            'sex' => 'male',
+        ), Arr::g($array, array('name', 'age', 'sex')));
+
+        $this->assertEquals(array(), Arr::g($array, array('name', 'age', 'sx'), true));
+        $this->assertEquals(array(
+            'name' => 'name_ff',
+            'age' => 55
+        ), Arr::g($array, array('name', 'age', 'sx'), false));
+    }
+
     public function testExcept()
     {
         //except 没有严格模式

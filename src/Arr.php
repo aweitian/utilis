@@ -103,6 +103,43 @@ class Arr
     }
 
     /**
+     * 功能和Get函数一样,第二个参数可以是逗号分隔的字符串或者数组
+     * @param $array
+     * @param array|string $filters
+     * @param bool $strict
+     * @return array
+     * @throws \Exception
+     */
+    public static function g(array $array, $filters, $strict = false)
+    {
+
+        if (!is_array($array)) {
+            throw new \Exception('First arg must be array.');
+        }
+
+        if (!is_bool($strict)) {
+            $strict = true;
+        }
+
+        if (is_string($filters)) {
+            $filters = explode(",", $filters);
+        } else {
+            $filters = (array)$filters;
+        }
+
+        $ret = array();
+        foreach ($filters as $filter) {
+            if (!array_key_exists($filter, $array)) {
+                if ($strict)
+                    return array();
+            } else {
+                $ret[$filter] = $array[$filter];
+            }
+        }
+        return $ret;
+    }
+
+    /**
      * 第一个数组，必选
      * 至少一个字符串类型
      * @return array
