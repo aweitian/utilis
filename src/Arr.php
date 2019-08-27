@@ -173,4 +173,29 @@ class Arr
         }
         return $ret;
     }
+
+    /**
+     * FILTER为空,默认返回全部数据,当$strict为真时,返回空
+     * @param array $array
+     * @param array $filters
+     * @param bool $strict
+     * @return array
+     */
+    public static function e(array $array, array $filters, $strict = false)
+    {
+        if (empty($filters)) {
+            if ($strict)
+                return array();
+            else
+                return $array;
+        }
+        $ret = array();
+        foreach ($array as $key => $filter) {
+            if (in_array($key, $filters)) {
+                continue;
+            }
+            $ret[$key] = $array[$key];
+        }
+        return $ret;
+    }
 }
