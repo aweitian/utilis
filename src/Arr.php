@@ -87,7 +87,7 @@ class Arr
         $filters = array();
         for ($i = 1; $i < func_num_args() - $rear; $i++) {
             $p = func_get_arg($i);
-            if (is_string($p)) {
+            if (is_string($p) || is_int($p)) {
                 $filters[] = $p;
             }
         }
@@ -146,6 +146,7 @@ class Arr
     /**
      * 第一个数组，必选
      * 至少一个字符串类型
+     * 比较数组键值
      * @return array
      * @throws \Exception
      */
@@ -161,7 +162,7 @@ class Arr
         $filters = array();
         for ($i = 1; $i < func_num_args(); $i++) {
             $p = func_get_arg($i);
-            if (is_string($p)) {
+            if (is_string($p) || is_int($p)) {
                 $filters[] = $p;
             }
         }
@@ -199,5 +200,92 @@ class Arr
             $new[$nk] = $val;
         }
         return $new;
+    }
+
+    /**
+     * FILTER为空,默认返回全部数据,当$strict为真时,返回空
+     * 比较数组键值
+     * @param array $array
+     * @param array $filters
+     * @param bool $strict
+     * @return array
+     */
+    public static function e(array $array, array $filters, $strict = false)
+    {
+        if (empty($filters)) {
+            if ($strict)
+                return array();
+            else
+                return $array;
+        }
+        $ret = array();
+        foreach ($array as $key => $filter) {
+            if (in_array($key, $filters)) {
+                continue;
+            }
+            $ret[$key] = $array[$key];
+        }
+        return $ret;
+    }
+
+    /**
+     * 第一个数组，必选
+     * 至少一个字符串类型
+     * 比较数组内容
+     * @return array
+     * @throws \Exception
+     */
+    public static function filter()
+    {
+        if (func_num_args() < 2) {
+            throw new \Exception('less than 2 parameters.');
+        }
+        $array = func_get_arg(0);
+        if (!is_array($array)) {
+            throw new \Exception('First arg must be array.');
+        }
+        $filters = array();
+        for ($i = 1; $i < func_num_args(); $i++) {
+            $p = func_get_arg($i);
+            if (is_string($p) || is_int($p)) {
+                $filters[] = $p;
+            }
+        }
+        if (empty($filters)) {
+            throw new \Exception('less than 1 string parameter for filtering.');
+        }
+        $ret = array();
+        foreach ($array as $filter) {
+            if (in_array($filter, $filters)) {
+                continue;
+            }
+            $ret[] = $filter;
+        }
+        return $ret;
+    }
+
+    /**
+     * FILTER为空,默认返回全部数据,当$strict为真时,返回空
+     * @param array $array
+     * @param array $filters
+     * @param bool $strict
+     * @return array
+     */
+    public static function f(array $array, array $filters, $strict = false)
+    {
+        if (empty($filters)) {
+            if ($strict)
+                return array();
+            else
+                return $array;
+        }
+        $ret = array();
+        foreach ($array as $value) {
+            if (in_array($value, $filters)) {
+                continue;
+            }
+            $ret[] = $value;
+        }
+        return $ret;
     }
 }

@@ -74,6 +74,71 @@ class ArrTest extends \PHPUnit_Framework_TestCase
         ), Arr::except($array, 'name', 'age', 'sx'));
     }
 
+    public function testE()
+    {
+        $array = array(
+            'name' => 'name_ff',
+            'age' => 55,
+            'sex' => 'male',
+            'extra' => 'abandon'
+        );
+
+        $this->assertEquals(array(
+            'name' => 'name_ff',
+            'sex' => 'male',
+        ), Arr::e($array, array('extra', 'age')));
+
+        $this->assertEquals(array(
+            'sex' => 'male',
+            'extra' => 'abandon'
+        ), Arr::e($array, array('name', 'age', 'sx')));
+
+        $this->assertEquals($array, Arr::e($array, array()));
+    }
+
+
+    public function testFilter()
+    {
+        //except 没有严格模式
+        $array = array(
+            'name_ff',
+            55,
+            'male',
+            'abandon'
+        );
+
+        $this->assertEquals(array(
+            'name_ff',
+            'male',
+        ), Arr::filter($array, 55, 'abandon'));
+
+        $this->assertEquals(array(
+            'male',
+            'abandon'
+        ), Arr::filter($array, 'name_ff', 55, 'sx'));
+    }
+
+    public function testF()
+    {
+        $array = array(
+            'name_ff',
+            55,
+            'male',
+            'abandon'
+        );
+
+        $this->assertEquals(array(
+            'name_ff',
+            'male',
+        ), Arr::f($array, array(55, 'abandon')));
+
+        $this->assertEquals(array(
+            'male',
+            'abandon'
+        ), Arr::f($array, array('name_ff', 55, 'sx')));
+    }
+
+
     public function testGetItem()
     {
         $array = array(
@@ -172,5 +237,19 @@ class ArrTest extends \PHPUnit_Framework_TestCase
             "db#pass" => 'pass',
             'root' => 'root'
         ), Arr::k($array, '_', '#'));
+    }
+
+    public function testReadme()
+    {
+        $data = array('a' => 'aaa', 'b' => 'bbb', 'cc' => 'ab');
+
+        $this->assertEquals(Arr::get($data, 'a', 'cc'), ['a' => 'aaa', 'cc' => 'ab']);
+        $this->assertEquals(Arr::g($data, ['a', 'cc']), ['a' => 'aaa', 'cc' => 'ab']);
+
+        $this->assertEquals(Arr::except($data, 'a', 'cc'), ['b' => 'bbb']);
+        $this->assertEquals(Arr::e($data, ['a', 'cc']), ['b' => 'bbb']);
+
+        $this->assertEquals(Arr::filter($data, 'aaa', 'ab'), ['bbb']);
+        $this->assertEquals(Arr::f($data, ['aaa', 'ab']), ['bbb']);
     }
 }
