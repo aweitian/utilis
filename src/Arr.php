@@ -186,7 +186,7 @@ class Arr
      * @param $replace
      * @param int $where
      */
-    public static function k($arr, $find, $replace, $where = self::K_REPLACE)
+    public static function k($arr, $find, $replace = "", $where = self::K_REPLACE)
     {
         $new = array();
         foreach ($arr as $key => $val) {

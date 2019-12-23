@@ -99,7 +99,7 @@ class Str
      * @param $replacement
      * @return string
      */
-    public static function startReplace($haystack, $needle, $replacement)
+    public static function startReplace($haystack, $needle, $replacement = "")
     {
         if ($needle === "")
             return $replacement . $haystack;
@@ -117,7 +117,7 @@ class Str
      * @param $replacement
      * @return string
      */
-    public static function endReplace($haystack, $needle, $replacement)
+    public static function endReplace($haystack, $needle, $replacement = "")
     {
         if ($needle === "")
             return $haystack . $replacement;
