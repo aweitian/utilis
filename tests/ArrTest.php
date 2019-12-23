@@ -146,4 +146,31 @@ class ArrTest extends \PHPUnit_Framework_TestCase
         );
         $this->assertEquals($ret, $new);
     }
+
+    public function testK()
+    {
+        $array = array(
+            "db_host" => "127.0.0.1",
+            "db_port" => 3306,
+            "db_user" => 'root',
+            "db_pass" => 'pass',
+            'root' => 'root'
+        );
+
+        $this->assertEquals(array(
+            "host" => "127.0.0.1",
+            "port" => 3306,
+            "user" => 'root',
+            "pass" => 'pass',
+            'root' => 'root'
+        ), Arr::k($array, 'db_', '', Arr::K_START));
+
+        $this->assertEquals(array(
+            "db#host" => "127.0.0.1",
+            "db#port" => 3306,
+            "db#user" => 'root',
+            "db#pass" => 'pass',
+            'root' => 'root'
+        ), Arr::k($array, '_', '#'));
+    }
 }

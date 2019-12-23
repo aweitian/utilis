@@ -29,4 +29,20 @@ class StrTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue(!Str::startsWith("balabala", "xba"));
 
     }
+
+    public function testStartReplace()
+    {
+        $haystack = "gondar";
+        $this->assertEquals("new_gondar", Str::startReplace($haystack, "", "new_"));
+        $this->assertEquals("deedar", Str::startReplace($haystack, "gon", "dee"));
+        $this->assertEquals("gondar", Str::startReplace($haystack, "dar", "gon"));
+    }
+
+    public function testEndReplace()
+    {
+        $haystack = "gondar";
+        $this->assertEquals("gondar_new", Str::endReplace($haystack, "", "_new"));
+        $this->assertEquals("gondee", Str::endReplace($haystack, "dar", "dee"));
+        $this->assertEquals("gondar", Str::endReplace($haystack, "gon", "dar"));
+    }
 }
